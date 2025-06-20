@@ -1,0 +1,159 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@source '../views/components/*.blade.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+.btn {
+    @apply px-4 py-2 rounded-md font-medium shadow transition;
+}
+
+.btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.btn-success {
+    @apply bg-emerald-500 text-white hover:bg-emerald-600;
+}
+
+.btn-warning {
+    @apply bg-yellow-400 text-white hover:bg-yellow-500;
+}
+
+.btn-danger {
+    @apply bg-rose-500 text-white hover:bg-rose-600;
+}
+
+.btn-secondary {
+    @apply bg-white text-gray-700 border border-gray-300 hover:bg-gray-50;
+
+}
+
+.btn-ghost {
+    @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+}
+
+
+/* card stats */
+.card-stats {
+    @apply p-5 text-white rounded-md shadow-sm transition hover:shadow-lg;
+}
+.card-stats-icon {
+    @apply p-3 mr-4 text-white rounded-full;
+}
+.card-stats-content {
+    @apply flex items-center;
+}
+.card-stats-label {
+    @apply text-white/80 text-sm;
+}
+.card-stats-value {
+    @apply text-xl font-semibold;
+}
+.card-stats-primary {
+    @apply bg-blue-600;
+}
+.card-stats-primary .card-stats-icon {
+    @apply bg-blue-800/20;
+}
+.card-stats-success {
+    @apply bg-emerald-500;
+}
+.card-stats-success .card-stats-icon {
+    @apply bg-emerald-800/20;
+}
+.card-stats-warning {
+    @apply bg-yellow-400;
+}
+.card-stats-warning .card-stats-icon {
+    @apply bg-white/20;
+}
+.card-stats-danger {
+    @apply bg-rose-500;
+}
+.card-stats-danger .card-stats-icon {
+    @apply bg-white/20;
+}
+
+
+/* progress bar */
+.progress-bar {
+    @apply w-full bg-gray-200 rounded-full overflow-hidden;
+}
+
+.progress-bar-inner {
+    @apply h-4 rounded-full;
+}
+
+.progress-bar-labeled .progress-bar-inner {
+    @apply h-6 flex items-center justify-center text-white text-xs font-semibold;
+}
+
+.progress-bar-primary .progress-bar-inner {
+    @apply bg-blue-600;
+}
+
+.progress-bar-success .progress-bar-inner {
+    @apply bg-emerald-500;
+}
+
+.progress-bar-warning .progress-bar-inner {
+    @apply bg-yellow-400;
+}
+
+.progress-bar-danger .progress-bar-inner {
+    @apply bg-rose-500;
+}
+
+
+/* alert */
+.alert {
+    @apply flex items-start gap-3 p-4 rounded-md border;
+}
+
+.alert-icon {
+    @apply w-5 h-5 mt-1;
+}
+
+.alert-content {
+    @apply font-semibold;
+}
+
+.alert-primary {
+    @apply bg-blue-50 text-blue-800 border-blue-200;
+}
+
+.alert-primary .alert-icon {
+    @apply text-blue-400;
+}
+
+.alert-success {
+    @apply bg-emerald-50 text-emerald-800 border-emerald-200;
+}
+
+.alert-success .alert-icon {
+    @apply text-emerald-400;
+}
+
+.alert-warning {
+    @apply bg-yellow-50 text-yellow-800 border-yellow-200;
+}
+
+.alert-warning .alert-icon {
+    @apply text-yellow-400;
+}
+
+.alert-danger {
+    @apply bg-rose-50 text-rose-800 border-rose-200;
+}
+
+.alert-danger .alert-icon {
+    @apply text-rose-400;
+}
