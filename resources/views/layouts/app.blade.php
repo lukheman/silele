@@ -15,8 +15,6 @@
     @else
     @endif
 
-  <!-- Alpine.js for small interactions -->
-  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <!-- Chart.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -35,11 +33,11 @@
     }
   </style>
 
-  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="antialiased text-gray-800 bg-gray-100">
 
-  <div class="flex h-screen" x-data="{ openSidebar: false }">
+<!-- x-data="{ openSidebar: false }" -->
+  <div class="flex h-screen" >
     @include('layouts.sidebar')
 
 
@@ -58,6 +56,108 @@
 </div>
 
   </div>
+
+
+  <!-- Modal logic for Tambah Data -->
+  <script>
+    // Modal logic for Tambah Data
+    const openBtn = document.getElementById('openAddModalBtn');
+    const closeBtn = document.getElementById('closeAddModalBtn');
+    const cancelBtn = document.getElementById('cancelAddModalBtn');
+    const modal = document.getElementById('addDataModal');
+
+    function openModal() {
+    console.log(openBtn);
+      modal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+    function closeModal() {
+      modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+    if (openBtn && closeBtn && cancelBtn && modal) {
+      openBtn.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+      cancelBtn.addEventListener('click', closeModal);
+      // Optional: close modal on ESC
+      document.addEventListener('keydown', (e) => {
+        if (!modal.classList.contains('hidden') && e.key === 'Escape') closeModal();
+      });
+    }
+  </script>
+
+  <!-- Profile dropdown logic -->
+  <script>
+    // Profile dropdown logic
+    (function() {
+      const btn = document.getElementById('profileDropdownBtn');
+      const menu = document.getElementById('profileDropdownMenu');
+      let open = false;
+
+      function openMenu() {
+        menu.classList.remove('hidden');
+        open = true;
+      }
+      function closeMenu() {
+        menu.classList.add('hidden');
+        open = false;
+      }
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (open) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+      document.addEventListener('click', function(e) {
+        if (open && !menu.contains(e.target) && e.target !== btn) {
+          closeMenu();
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (open && e.key === 'Escape') {
+          closeMenu();
+        }
+      });
+    })();
+  </script>
+
+  <script>
+    (function() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      const toggleBtn = document.getElementById('sidebarToggleBtn');
+      function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+      function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+      if (toggleBtn && sidebar && overlay) {
+        toggleBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (sidebar.classList.contains('-translate-x-full')) {
+            openSidebar();
+          } else {
+            closeSidebar();
+          }
+        });
+        overlay.addEventListener('click', closeSidebar);
+        // Optional: close sidebar on ESC
+        document.addEventListener('keydown', function(e) {
+          if (!sidebar.classList.contains('-translate-x-full') && e.key === 'Escape') {
+            closeSidebar();
+          }
+        });
+      }
+    })();
+  </script>
+
 
 </body>
 </html>
