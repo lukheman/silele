@@ -7,14 +7,13 @@
             </div>
         <div class="flex items-center gap-4">
         <!-- Profile dropdown -->
-        <div class="relative" x-data="{ open: false }">
-        <button @click="open = !open" class="flex items-center p-1 rounded-full hover:bg-gray-100 focus:outline-none">
-        <img src="https://i.pravatar.cc/40?img=3" alt="avatar" class="w-8 h-8 rounded-full" />
-        </button>
-        <div x-show="open" x-transition @click.outside="open=false" class="absolute right-0 w-48 mt-2 origin-top-right bg-white border border-gray-200 rounded-md shadow-lg">
-        <a href="{{ route('profile')}}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
-                <a href="login.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+        <div class="relative">
+            <button id="profileDropdownBtn" class="flex items-center p-1 rounded-full hover:bg-gray-100 focus:outline-none">
+              <img src="https://i.pravatar.cc/40?img=3" alt="avatar" class="w-8 h-8 rounded-full" />
+            </button>
+            <div id="profileDropdownMenu" class="absolute right-0 w-48 mt-2 origin-top-right bg-white border border-gray-200 rounded-md shadow-lg hidden">
+              <a href="{{ route('profile')}}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+              <a href="{{ route('logout')}}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
             </div>
         </div>
     </div>

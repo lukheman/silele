@@ -1,0 +1,5 @@
+<td class="px-6 py-4 text-right space-x-2">
+    <button class="inline-flex items-center px-3 py-1 text-xs font-medium rounded bg-blue-50 text-blue-700 hover:bg-blue-100 transition"><svg class='w-4 h-4 mr-1' fill='none' stroke='currentColor' stroke-width='2' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' d='M15 12H9m12 0A9 9 0 11 3 12a9 9 0 0118 0z'/></svg>View</button>
+    <button class="inline-flex items-center px-3 py-1 text-xs font-medium rounded bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition"><svg class='w-4 h-4 mr-1' fill='none' stroke='currentColor' stroke-width='2' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' d='M5 13l4 4L19 7'/></svg>Edit</button>
+    <button class="inline-flex items-center px-3 py-1 text-xs font-medium rounded bg-rose-50 text-rose-700 hover:bg-rose-100 transition"><svg class='w-4 h-4 mr-1' fill='none' stroke='currentColor' stroke-width='2' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'/></svg>Delete</button>
+</td>

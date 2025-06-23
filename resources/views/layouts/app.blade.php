@@ -33,10 +33,12 @@
     }
   </style>
 
+<!-- Toastfy -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
 </head>
 <body class="antialiased text-gray-800 bg-gray-100">
 
-<!-- x-data="{ openSidebar: false }" -->
   <div class="flex h-screen" >
     @include('layouts.sidebar')
 
@@ -58,33 +60,6 @@
   </div>
 
 
-  <!-- Modal logic for Tambah Data -->
-  <script>
-    // Modal logic for Tambah Data
-    const openBtn = document.getElementById('openAddModalBtn');
-    const closeBtn = document.getElementById('closeAddModalBtn');
-    const cancelBtn = document.getElementById('cancelAddModalBtn');
-    const modal = document.getElementById('addDataModal');
-
-    function openModal() {
-    console.log(openBtn);
-      modal.classList.remove('hidden');
-      document.body.classList.add('overflow-hidden');
-    }
-    function closeModal() {
-      modal.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden');
-    }
-    if (openBtn && closeBtn && cancelBtn && modal) {
-      openBtn.addEventListener('click', openModal);
-      closeBtn.addEventListener('click', closeModal);
-      cancelBtn.addEventListener('click', closeModal);
-      // Optional: close modal on ESC
-      document.addEventListener('keydown', (e) => {
-        if (!modal.classList.contains('hidden') && e.key === 'Escape') closeModal();
-      });
-    }
-  </script>
 
   <!-- Profile dropdown logic -->
   <script>
@@ -157,6 +132,108 @@
       }
     })();
   </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+
+
+        document.addEventListener('livewire:initialized', () => {
+
+            Livewire.on('toast', ({ message, variant }) => {
+                const borderColors = {
+                    success: "#10b981", // Tailwind CSS 4 emerald-500
+                    warning: "#facc15", // Tailwind CSS 4 yellow-400
+                    error: "#f43f5e"    // Tailwind CSS 4 rose-500
+                };
+
+                Toastify({
+                    text: message,
+                    duration: 3000,
+                    close: false,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "#ffffff", // White background
+                        border: `2px solid ${borderColors[variant] || "#374151"}`, // Tailwind CSS 4 gray-700 for default
+                        color: "#111827", // Tailwind CSS 4 gray-900 for text
+                        borderRadius: "0.375rem", // Tailwind CSS 4 rounded-md
+                        boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05)" // Tailwind CSS 4 shadow-md
+                    },
+                }).showToast();
+            });
+
+
+
+            Livewire.on('deleteConfirmation', ({ message }) => {
+                Swal.fire({
+                    title: message,
+                    icon: "warning",
+                    showCancelButton: true,
+                    customClass: {
+                        confirmButton: 'btn btn-primary',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    confirmButtonText: "Ya, Hapus",
+                    showClass: {
+                        popup: 'animate__animated animate__fadeIn animate__faster' // Entrance animation
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOut animate__faster' // Exit animation
+                    }
+                }).then((result) => {
+                        if (result.isConfirmed) {
+                            Livewire.dispatch('deleteConfirmed');
+                        }
+                    });
+            });
+
+            Livewire.on('close-modal', () => {
+
+                const modal = document.getElementById('modalForm');
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+
+
+            });
+
+            Livewire.on('open-modal', () => {
+
+                const modal = document.getElementById('modalForm');
+
+                // show modal form
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+
+                // Optional: close modal on ESC
+                document.addEventListener('keydown', (e) => {
+                    if (!modal.classList.contains('hidden') && e.key === 'Escape') {
+                        closeModal();
+                    }
+                });
+
+            });
+
+
+
+        });
+
+<!-- Modal logic for Tambah Data -->
+
+
+
+
+
+
+        </script>
+
+        @stack('scripts')
+
+
+    <!-- Toastfy -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 
 
 </body>

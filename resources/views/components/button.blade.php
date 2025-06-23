@@ -1,7 +1,13 @@
 @props([
-    'variant' => 'primary'
+    'variant' => 'primary',
+    'icon' => null
 ])
 
-<button class="btn btn-{{ $variant }}">
+@php
+    $classes = 'btn btn-' . $variant;
+@endphp
+
+<button id="{{ $attributes->get('id')}}" {{ $attributes->merge(['class' => $classes])}}>
+    <i class="{{ $icon }} w-5 h-5"></i>
     {{ $slot }}
 </button>
