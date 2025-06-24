@@ -1,11 +1,11 @@
 <div>
     <x-section title="Profile">
         <div class="flex flex-col items-center gap-4 mb-6">
-            <img src="{{ asset('storage/' . (auth()->user()->photo ?? '')) }}" alt="avatar" class="w-24 h-24 rounded-full border-4 border-blue-100 shadow" />
-            <div class="relative" wire:submit.prevent="updateProfilePhoto">
+            <img src="{{ auth()->user()->photo ?  asset('storage/' . (auth()->user()->photo ?? '')) : 'https://i.pravatar.cc/40?img=3'  }}" alt="avatar" class="w-24 h-24 rounded-full border-4 border-blue-100 shadow" />
+            <div class="text-center" wire:submit.prevent="updateProfilePhoto">
                 <form>
 
-                <input type="file" id="profile-photo" class="" wire:model="photo" accept="image/*" />
+                <input type="file" id="profile-photo" class="" wire:model="photo" accept="image/*" /><br>
                 <button type="sumbit" class="mt-2 px-3 py-1 text-sm text-white bg-blue-600 rounded-md shadow hover:bg-blue-700">Edit Foto</button>
                 </form>
             </div>
