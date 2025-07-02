@@ -16,6 +16,21 @@ class NaiveBayes {
         $this->konfigurasi = $konfigurasi;
     }
 
+    /**
+     * Melakukan diagnosis berdasarkan konfigurasi gejala dan penyakit.
+     *
+     * Proses:
+     * 1. Melakukan iterasi pada setiap penyakit yang ada di konfigurasi.
+     * 2. Mengambil probabilitas penyakit dari database.
+     * 3. Menghitung probabilitas setiap gejala untuk penyakit tersebut.
+     * 4. Menyimpan hasil probabilitas penyakit berdasarkan gejala.
+     * 5. Mengambil hasil diagnosis dengan probabilitas terbesar.
+     *
+     * Contoh return value:
+     * [
+     *     'P01' => 0.85
+     * ]
+     */
     public function diagnosis() {
 
         foreach ($this->konfigurasi as $kode_penyakit => $gejala) {
