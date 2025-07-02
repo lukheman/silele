@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="flex justify-end gap-2">
-                    <button type="button" id="cancelAddModalBtn" wire:click="resetForm" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-300">Reset</button>
+                    <!-- <button type="button" id="cancelAddModalBtn" wire:click="resetForm" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-300">Reset</button> -->
                     <button id="saveAddModalBtn" wire:click="saveGejalaPenyakit" type="button" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">Simpan</button>
                 </div>
             </div>
