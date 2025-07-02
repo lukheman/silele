@@ -18,7 +18,7 @@
                 <a href="{{ route('landing')}}" class="hover:text-green-300 transition">Beranda</a>
                 <a href="{{ route('landing')}}#features" class="hover:text-green-300 transition">Fitur</a>
                 <a href="{{ route('landing')}}#how-it-works" class="hover:text-green-300 transition">Cara Kerja</a>
-                <a href="{{ route('landing')}}#diagnosis" class="hover:text-green-300 transition">Diagnosis</a>
+                <!-- <a href="{{ route('landing')}}#diagnosis" class="hover:text-green-300 transition">Diagnosis</a> -->
                 <a href="{{ route('login')}}" class="hover:text-green-300 transition">Login</a>
             </nav>
         </div>
