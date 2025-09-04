@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('penyakit', function (Blueprint $table) {
             $table->id();
             $table->string('kode')->unique();
-            $table->float('probabilitas')->nullable();
             $table->string('nama');
             $table->text('deskripsi')->nullable();
             $table->text('solusi')->nullable();

@@ -24,9 +24,6 @@ class PenyakitForm extends Form
     #[Validate('nullable')]
     public $solusi = '';
 
-    #[Validate('required')]
-    public $probabilitas = '';
-
 
     protected function rules(): array
     {
@@ -43,7 +40,6 @@ class PenyakitForm extends Form
             'kode.unique' => 'Kode penyakit telah digunakan',
             'kode.required' => 'Kode penyakit belum ada',
             'nama.required' => 'Nama penyakit belum ada',
-            'probabilitas.required' => 'Probabilitas penyakit belum ada'
         ];
     }
 

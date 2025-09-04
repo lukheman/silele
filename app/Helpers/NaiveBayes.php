@@ -5,112 +5,107 @@ namespace App\Helpers;
 use App\Models\Gejala;
 use App\Models\Penyakit;
 
-class NaiveBayes {
-
+/**
+ * Kelas NaiveBayes
+ *
+ * Digunakan untuk melakukan diagnosis penyakit berdasarkan gejala
+ * dengan menggunakan metode Naive Bayes sederhana.
+ */
+class NaiveBayes
+{
+    /** @var int Jumlah total gejala yang tersedia */
     public int $jumlah_gejala;
-    public array $set_probabilitas_penyakit = [];
-    public $konfigurasi;
 
-    public function __construct($konfigurasi) {
-        $this->jumlah_gejala = Gejala::count();
-        $this->konfigurasi = $konfigurasi;
+    /**
+     * @var array<int,float>
+     * Menyimpan hasil probabilitas penyakit berdasarkan gejala.
+     * Contoh: [1 => 0.85]
+     */
+    public array $set_probabilitas_penyakit = [];
+
+    /** @var array<int> ID gejala yang dipilih untuk diagnosis */
+    public array $idGejalaDipilih;
+
+    /** @var float Nilai probabilitas awal (prior probability) penyakit */
+    private float $p;
+
+    /** @var int Jumlah gejala dalam dataset */
+    private int $m;
+
+    /**
+     * @var array<int,float>
+     * Menyimpan probabilitas setiap penyakit.
+     * Contoh: [1 => 0.131, 2 => 0.121]
+     */
+    private array $probabilitasPenyakit = [];
+
+    /**
+     * Konstruktor untuk inisialisasi NaiveBayes.
+     *
+     * @param  array<int>  $idGejalaDipilih  Daftar ID gejala yang dipilih.
+     */
+    public function __construct(array $idGejalaDipilih)
+    {
+        $this->jumlah_gejala = Gejala::query()->count();
+        $this->idGejalaDipilih = $idGejalaDipilih;
+        $this->p = 1 / Penyakit::count();
+        $this->m = Gejala::count();
     }
 
     /**
-     * Melakukan diagnosis berdasarkan konfigurasi gejala dan penyakit.
+     * Melakukan diagnosis berdasarkan gejala yang dipilih.
      *
      * Proses:
-     * 1. Melakukan iterasi pada setiap penyakit yang ada di konfigurasi.
-     * 2. Mengambil probabilitas penyakit dari database.
-     * 3. Menghitung probabilitas setiap gejala untuk penyakit tersebut.
-     * 4. Menyimpan hasil probabilitas penyakit berdasarkan gejala.
-     * 5. Mengambil hasil diagnosis dengan probabilitas terbesar.
+     * 1. Ambil semua penyakit beserta gejalanya dari database.
+     * 2. Hitung probabilitas gejala untuk setiap penyakit.
+     * 3. Hitung probabilitas akhir untuk setiap penyakit.
+     * 4. Ambil hasil dengan probabilitas terbesar.
      *
-     * Contoh return value:
-     * [
-     *     'P01' => 0.85
-     * ]
+     * @return Penyakit Penyakit dengan probabilitas terbesar.
      */
-    public function diagnosis() {
+    public function diagnosis(): Penyakit
+    {
+        $semuaPenyakit = Penyakit::with('gejala')->get();
 
-        foreach ($this->konfigurasi as $kode_penyakit => $gejala) {
-            $probabilitas_penyakit = Penyakit::where('kode', $kode_penyakit)->first()->probabilitas;
+        foreach ($semuaPenyakit as $penyakit) {
+            $himpunanProbabilitasGejalaPenyakit = [];
 
-            $probabilitas_gejala = [];
-            foreach ($gejala as $kode_gejala => $is_exist) {
-                $probabilitas = $this->getProbabilitasGejala($probabilitas_penyakit, $is_exist);
-                array_push($probabilitas_gejala, $probabilitas);
+            foreach ($this->idGejalaDipilih as $idGejala) {
+                // Hitung Nc (apakah penyakit punya gejala tertentu)
+                $nc = $penyakit->gejala->contains($idGejala) ? 1 : 0;
+
+                // Rumus probabilitas gejala
+                $probabilitasGejala = round(($nc + $this->m * $this->p) / (1 + $this->m), 4);
+
+                $himpunanProbabilitasGejalaPenyakit[] = $probabilitasGejala;
             }
-            $this->probabilitasPenyakit($kode_penyakit, $probabilitas_gejala);
+
+            // Probabilitas penyakit = hasil kali semua probabilitas gejala
+            $this->probabilitasPenyakit[$penyakit->id] =
+                round(array_product($himpunanProbabilitasGejalaPenyakit), 6);
         }
 
-        $result = $this->probabilitasTerbesarPenyakit();
-        return $result;
-
+        return $this->probabilitasTerbesarPenyakit();
     }
 
     /**
-     * Mengembalikan kode penyakit dengan probabilitas terbesar dari set_probabilitas_penyakit.
+     * Mengambil penyakit dengan probabilitas terbesar.
      *
-     * Contoh return value:
-     * [
-     *     'P01' => 0.85
-     * ]
+     * @return Penyakit Penyakit dengan probabilitas terbesar, termasuk nilai probabilitas dan persentasenya.
      */
-    public function probabilitasTerbesarPenyakit() {
-        $max = 0;
-        $kode_penyakit = null;
+    private function probabilitasTerbesarPenyakit(): Penyakit
+    {
+        $idPenyakitTerbesar = array_keys(
+            $this->probabilitasPenyakit,
+            max($this->probabilitasPenyakit)
+        )[0];
 
-        foreach ($this->set_probabilitas_penyakit as $key => $value) {
-            if($value > $max) {
-                $max = $value;
-                $kode_penyakit = $key;
-            }
-        }
+        $maxValue = $this->probabilitasPenyakit[$idPenyakitTerbesar];
 
-        return [$kode_penyakit => $max];
+        $penyakit = Penyakit::query()->find($idPenyakitTerbesar);
+        $penyakit->probabilitas = $maxValue;
+        $penyakit->persentase = $maxValue * 100;
+
+        return $penyakit;
     }
-
-    /**
-     * Menghitung probabilitas gejala berdasarkan penyakit.
-     *
-     * Contoh penggunaan:
-     * $probabilitas = $obj->probabilitasGejalaBerdasarkanPenyakit('P001', 'G001', 0.2, 1);
-     *
-     * Contoh return value:
-     * Jika $this->jumlah_gejala = 15, $probabilitas_penyakit = 0.2, $gejala_is_exist = 1
-     * Maka hasilnya:
-     * (1 + 15 * 0.2) / (1 + 15) = 0.25
-     *
-     */
-    public function getProbabilitasGejala( float $probabilitas_penyakit, bool|int $gejala_is_exist): float {
-        return ($gejala_is_exist + $this->jumlah_gejala * $probabilitas_penyakit) /
-               (1 + $this->jumlah_gejala);
-    }
-
-    /**
-     * Contoh penggunaan:
-     *
-     * $kode_penyakit = 'P001';
-     * $probabilitas_gejala = [0.2, 0.2, 0.2];
-     *
-     * $hasil = $this->probabilitasPenyakit($kode_penyakit, $probabilitas_gejala);
-     * $hasil sekarang berisi hasil perkalian semua probabilitas gejala
-     *
-     * Dalam contoh di atas:
-     * $hasil = 0.2 * 0.2 * 0.2 = 0.008
-     */
-    public function probabilitasPenyakit(
-        string $kode_penyakit,
-        array $probabilitas_gejala
-    ): float {
-        $hasil = 1;
-        foreach ($probabilitas_gejala as $p) {
-            $hasil *= $p;
-        }
-
-        $this->set_probabilitas_penyakit[$kode_penyakit] = $hasil;
-        return $hasil;
-    }
-
 }

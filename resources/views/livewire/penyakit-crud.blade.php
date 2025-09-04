@@ -8,7 +8,7 @@
             :columns="[
             'kode' => 'Kode Penyakit',
             'nama' => 'Nama Penyakit',
-            'probabilitas' => 'Nilai Probabilitas']
+            ]
             "
         />
 
@@ -28,11 +28,6 @@
 
     <x-input label="Nama Penyakit" wire:model="form.nama" />
     @error('form.nama')
-        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-    @enderror
-
-    <x-input label="Nilai Probabilitas" wire:model="form.probabilitas" min="0" max="1" step="0.01" />
-    @error('form.probabilitas')
         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
     @enderror
 

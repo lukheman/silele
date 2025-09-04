@@ -20,7 +20,6 @@
                         <tr class="bg-gray-100">
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Kode Gejala</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Nama Gejala</th>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Probabilitas</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Aksi</th>
                         </tr>
                     </thead>
@@ -30,7 +29,6 @@
                                 <tr class="border-t">
                                     <td class="px-4 py-2 text-sm text-gray-600">{{ $gejala->kode ?? '-' }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-600">{{ $gejala->nama }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-600">{{ $gejala->pivot->probabilitas ?? '-' }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-600 flex gap-2">
                                         <button wire:click="editGejalaPenyakit({{ $gejala->id }})" class="px-2 py-1 text-xs font-medium text-white bg-yellow-500 rounded hover:bg-yellow-600">Edit</button>
                                         <button @click="confirmDelete = true; deleteId = {{ $gejala->id }}" class="px-2 py-1 text-xs font-medium text-white bg-red-500 rounded hover:bg-red-600">Hapus</button>
@@ -58,13 +56,9 @@
                         <span class="text-sm text-red-600">{{ $message }}</span>
                     @enderror
 
-                    <x-input type="number" min="0" max="1" step="0.01" label="Nilai Probabilitas" wire:model="probabilitas" />
-                    @error('probabilitas')
-                        <span class="text-sm text-red-600">{{ $message }}</span>
-                    @enderror
+                   <input type="hidden" wire:model="selectedGejala" />
+               </div>
 
-                    <input type="hidden" wire:model="selectedGejala" />
-                </div>
 
                 <div class="flex justify-end gap-2">
                     <!-- <button type="button" id="cancelAddModalBtn" wire:click="resetForm" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-300">Reset</button> -->

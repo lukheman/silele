@@ -9,16 +9,16 @@ use App\Models\RiwayatDiagnosis;
 use App\Traits\HasNotify;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
-use function array_key_first;
 
 class Diagnosis extends Component
 {
     use HasNotify;
 
     public $selectedGejala = [];
-    public $diagnosa;
     public $showHasil = false;
     public ?float $probabilitas;
+
+    public ?Penyakit $diagnosaPenyakit;
 
     #[Computed]
     public function gejala() {
@@ -26,48 +26,20 @@ class Diagnosis extends Component
     }
 
     public function startDiagnosis() {
-        $penyakitList = Penyakit::with('gejala')->get(); // Pastikan relasi `gejala` ada
-        $allGejala = Gejala::pluck('kode')->toArray(); // Ambil semua kode gejala
+        $NB = new NaiveBayes($this->selectedGejala);
 
-        $konfigurasi = [];
+        $this->diagnosaPenyakit = $NB->diagnosis();
 
-        foreach ($penyakitList as $penyakit) {
-
-            $gejalaDiagnosa = []; // ['G1' => 1, 'G2' => 0]
-
-            foreach ($this->selectedGejala as $id_gejala) {
-
-                $hasGejala = $penyakit->gejala->contains('id', $id_gejala);
-
-                // apakah penyakit ini mempunyai gejala dengan $id_gejala
-                if($hasGejala) {
-                    $gejalaDiagnosa[$id_gejala] = 1;
-
-                } else {
-
-                    $gejalaDiagnosa[$id_gejala] = 0;
-                }
-
-            }
-
-            $konfigurasi[$penyakit->kode] = $gejalaDiagnosa;
-        }
-
-        $NB = new NaiveBayes($konfigurasi);
-        $hasil_diagnosis =$NB->diagnosis();
-
-        $this->diagnosa = Penyakit::where('kode', array_key_first($hasil_diagnosis))->first();
-        $this->probabilitas = $hasil_diagnosis[$this->diagnosa->kode];
         $this->showHasil = true;
         $this->simpanHasilDiagnosis();
     }
 
     public function simpanHasilDiagnosis() {
 
-        RiwayatDiagnosis::create([
+        RiwayatDiagnosis::query()->create([
             'id_user' => auth()->user()->id,
-            'id_penyakit' => $this->diagnosa->id,
-            'probabilitas' => $this->probabilitas
+            'id_penyakit' => $this->diagnosaPenyakit?->id,
+            'probabilitas' => $this->diagnosaPenyakit?->probabilitas
         ]);
 
         $this->notifySuccess('Berhasil melakukan diagnosis dan menyimpan hasil diagnosis');

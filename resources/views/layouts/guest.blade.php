@@ -12,7 +12,7 @@
     <header class="bg-green-700 text-white py-4 sticky top-0 z-50">
         <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
             <div class="flex items-center space-x-4 mb-4 md:mb-0">
-                <h1 class="text-2xl font-semibold">PakarLee</h1>
+                <h1 class="text-2xl font-semibold">SiLele</h1>
             </div>
             <nav class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6">
                 <a href="{{ route('landing')}}" class="hover:text-green-300 transition">Beranda</a>

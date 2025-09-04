@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_penyakit')->constrained('penyakit')->cascadeOnDelete();
             $table->foreignId('id_gejala')->constrained('gejala')->cascadeOnDelete();
-            $table->float('probabilitas');
             $table->timestamps();
         });
     }

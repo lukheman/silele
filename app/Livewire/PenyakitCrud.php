@@ -38,7 +38,6 @@ class PenyakitCrud extends Component implements ModalFormInterface
 
         $this->form->kode = $penyakit['kode'];
         $this->form->nama = $penyakit['nama'];
-        $this->form->probabilitas = $penyakit['probabilitas'];
         $this->form->deskripsi = $penyakit['deskripsi'];
         $this->form->solusi = $penyakit['solusi'];
 
