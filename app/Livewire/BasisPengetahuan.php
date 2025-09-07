@@ -17,7 +17,6 @@ class BasisPengetahuan extends Component
     use WithPagination;
 
     public $selectedPenyakit = null;
-    public float $probabilitas = 0.1;
 
     #[Rule('required')]
     public $selectedGejala = null;
@@ -43,11 +42,7 @@ class BasisPengetahuan extends Component
         // selain menambahakan gejala gejala, juga memperbarui gejaa yang sudah ada
         $this->validate();
 
-        $this->selectedPenyakit->gejala()->syncWithoutDetaching([
-            $this->selectedGejala => [
-                'probabilitas' => $this->probabilitas,
-            ]
-        ]);
+        $this->selectedPenyakit->gejala()->syncWithoutDetaching([$this->selectedGejala]);
 
         $this->notifySuccess('Berhasil memperbarui gejala ke penyakit');
 
@@ -56,7 +51,6 @@ class BasisPengetahuan extends Component
     public function editGejalaPenyakit($id) {
         $this->selectedGejala = $id;
         $gejala = $this->selectedPenyakit->gejala()->find($id);
-        $this->probabilitas = $gejala->pivot->probabilitas;
 
 
     }
