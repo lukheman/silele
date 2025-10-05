@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('riwayat_diagnosis', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_pengguna');
-            $table->foreignId('id_penyakit')->constrained('penyakit')->cascadeOnDelete();
-            $table->float('probabilitas');
-            $table->timestamps();
+        Schema::table('penyakit', function (Blueprint $table) {
+            $table->string('photo')->nullable();
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('riwayat_diagnoses');
+        Schema::table('penyakit', function (Blueprint $table) {
+            //
+        });
     }
 };

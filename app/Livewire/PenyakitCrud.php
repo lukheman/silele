@@ -10,6 +10,7 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use App\Interfaces\ModalFormInterface;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 
@@ -19,6 +20,7 @@ class PenyakitCrud extends Component implements ModalFormInterface
     use HasNotify;
     use HasConfirmation;
     use WithPagination;
+    use WithFileUploads;
 
     public PenyakitForm $form;
     public string $modalFormState = 'create';
@@ -40,6 +42,7 @@ class PenyakitCrud extends Component implements ModalFormInterface
         $this->form->nama = $penyakit['nama'];
         $this->form->deskripsi = $penyakit['deskripsi'];
         $this->form->solusi = $penyakit['solusi'];
+        $this->form->photo = $penyakit['photo'];
 
         $this->form->penyakit = Penyakit::find($penyakit['id']);
 

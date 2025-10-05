@@ -25,18 +25,31 @@
 
 
 <div class="mt-8 flex justify-center" wire:show="showHasil">
-    <div class="w-full max-w-lg rounded-xl p-8 flex flex-col gap-6">
+    <div class="w-full max-w-lg rounded-xl p-8 flex flex-col gap-6 bg-white shadow-sm">
+        
+        {{-- Gambar Penyakit (jika tersedia) --}}
+        @if (!empty($diagnosaPenyakit->photo))
+            <div class="flex justify-center">
+                <img src="{{ asset('storage/' . $diagnosaPenyakit->photo) }}"
+                     alt="Gambar {{ $diagnosaPenyakit->nama }}"
+                     class="rounded-lg shadow-md max-h-56 object-cover">
+            </div>
+        @endif
+
         <div class="text-2xl font-semibold text-center text-gray-800">
             {{ $diagnosaPenyakit->nama ?? 'Tidak ada penyakit terdeteksi' }}
         </div>
+
         <div class="text-sm text-gray-600 bg-gray-50 rounded-lg p-5 border border-gray-100">
             <strong class="text-gray-700">Deskripsi:</strong>
             <p class="mt-2">{{ $diagnosaPenyakit->deskripsi ?? 'Tidak ada deskripsi tersedia.' }}</p>
         </div>
+
         <div class="text-sm text-gray-600 bg-gray-50 rounded-lg p-5 border border-gray-100">
             <strong class="text-gray-700">Solusi:</strong>
             <p class="mt-2">{{ $diagnosaPenyakit->solusi ?? 'Tidak ada solusi tersedia.' }}</p>
         </div>
+
         <x-button wire:click="resetDiagnosis">Diagnosis Lagi</x-button>
     </div>
 </div>
