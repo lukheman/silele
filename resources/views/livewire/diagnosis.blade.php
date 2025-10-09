@@ -14,7 +14,7 @@
                     class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
                 />
                 <label for="gejala-{{ $item->id }}" class="ml-3 text-sm font-medium text-gray-900 cursor-pointer flex-grow">
-                    {{ $item->nama }}
+                    {{ $item->kode}} - {{ $item->nama }}
                 </label>
             </div>
             @endforeach
@@ -26,7 +26,7 @@
 
 <div class="mt-8 flex justify-center" wire:show="showHasil">
     <div class="w-full max-w-lg rounded-xl p-8 flex flex-col gap-6 bg-white shadow-sm">
-        
+
         {{-- Gambar Penyakit (jika tersedia) --}}
         @if (!empty($diagnosaPenyakit->photo))
             <div class="flex justify-center">
@@ -36,20 +36,34 @@
             </div>
         @endif
 
+        {{-- Nama Penyakit --}}
         <div class="text-2xl font-semibold text-center text-gray-800">
             {{ $diagnosaPenyakit->nama ?? 'Tidak ada penyakit terdeteksi' }}
         </div>
 
+        {{-- Nilai Probabilitas (jika ada) --}}
+        @if (!empty($diagnosaPenyakit->probabilitas))
+            <div class="text-center">
+                <span class="text-sm text-gray-600">Nilai Probabilitas:</span>
+                <div class="mt-1 text-3xl font-bold">
+                    {{ $diagnosaPenyakit->probabilitas }}
+                </div>
+            </div>
+        @endif
+
+        {{-- Deskripsi --}}
         <div class="text-sm text-gray-600 bg-gray-50 rounded-lg p-5 border border-gray-100">
             <strong class="text-gray-700">Deskripsi:</strong>
             <p class="mt-2">{{ $diagnosaPenyakit->deskripsi ?? 'Tidak ada deskripsi tersedia.' }}</p>
         </div>
 
+        {{-- Solusi --}}
         <div class="text-sm text-gray-600 bg-gray-50 rounded-lg p-5 border border-gray-100">
             <strong class="text-gray-700">Solusi:</strong>
             <p class="mt-2">{{ $diagnosaPenyakit->solusi ?? 'Tidak ada solusi tersedia.' }}</p>
         </div>
 
+        {{-- Tombol Ulangi Diagnosis --}}
         <x-button wire:click="resetDiagnosis">Diagnosis Lagi</x-button>
     </div>
 </div>

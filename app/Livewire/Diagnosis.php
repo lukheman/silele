@@ -15,13 +15,12 @@ class Diagnosis extends Component
 
     public $selectedGejala = [];
     public $showHasil = false;
-    public ?float $probabilitas;
 
     public ?Penyakit $diagnosaPenyakit;
 
     #[Computed]
     public function gejala() {
-        return Gejala::all();
+        return Gejala::query()->orderBy('kode')->get();
     }
 
     public function startDiagnosis() {
@@ -30,7 +29,6 @@ class Diagnosis extends Component
         $this->diagnosaPenyakit = $NB->diagnosis();
 
         $this->showHasil = true;
-        $this->simpanHasilDiagnosis();
     }
 
     public function resetDiagnosis() {
