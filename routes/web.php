@@ -9,7 +9,6 @@ Route::get('/registrasi', \App\Livewire\Registrasi::class)->middleware('guest')-
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard');
-    Route::get('/riwayat-diagnosis', \App\Livewire\RiwayatDiagnosis::class)->name('riwayat-diagnosis');
     Route::get('/profile', \App\Livewire\Profile::class)->name('profile');
     Route::get('/gejala', \App\Livewire\GejalaCrud::class)->name('gejala');
     Route::get('/penyakit', \App\Livewire\PenyakitCrud::class)->name('penyakit');

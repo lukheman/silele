@@ -48,8 +48,4 @@ class User extends Authenticatable
         ];
     }
 
-    public function riwayatDiagnosis() {
-        return $this->hasMany(RiwayatDiagnosis::class, 'id_user', 'id');
-    }
-
 }

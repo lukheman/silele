@@ -14,7 +14,6 @@
     @endif
 
     <x-nav-link href="{{ route('diagnosis')}}" icon="fas fa-stethoscope" :active="request()->routeIs('diagnosis')">Diagnosis</x-nav-link>
-    <x-nav-link href="{{ route('riwayat-diagnosis')}}" icon="fas fa-history" :active="request()->routeIs('riwayat-diagnosis')">Riwayat Diagnosis</x-nav-link>
 </nav>
 </aside>
 
