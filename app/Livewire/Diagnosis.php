@@ -19,19 +19,30 @@ class Diagnosis extends Component
     public ?Penyakit $diagnosaPenyakit;
 
     #[Computed]
-    public function gejala() {
+    public function gejala()
+    {
         return Gejala::query()->orderBy('kode')->get();
     }
 
-    public function startDiagnosis() {
-        $NB = new NaiveBayes($this->selectedGejala);
+    public function startDiagnosis()
+    {
+        if (empty($this->selectedGejala)) {
+            $this->notifyError('Pilih minimal satu gejala!');
+            return;
+        }
+
+        // Pastikan selectedGejala adalah array integer
+        $gejalaIds = array_map('intval', $this->selectedGejala);
+
+        $NB = new NaiveBayes($gejalaIds);
 
         $this->diagnosaPenyakit = $NB->diagnosis();
 
         $this->showHasil = true;
     }
 
-    public function resetDiagnosis() {
+    public function resetDiagnosis()
+    {
         $this->reset();
     }
 
