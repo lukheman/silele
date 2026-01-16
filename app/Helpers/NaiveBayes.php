@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Gejala;
 use App\Models\Penyakit;
+use RuntimeException;
 
 /**
  * Kelas NaiveBayes
@@ -42,13 +43,23 @@ class NaiveBayes
     /**
      * Konstruktor untuk inisialisasi NaiveBayes.
      *
-     * @param  array<int>  $idGejalaDipilih  Daftar ID gejala yang dipilih.
+     * @param array<int> $idGejalaDipilih Daftar ID gejala yang dipilih.
+     *
+     * @throws RuntimeException Jika tidak ada penyakit dalam database.
      */
     public function __construct(array $idGejalaDipilih)
     {
         $this->jumlah_gejala = Gejala::query()->count();
         $this->idGejalaDipilih = $idGejalaDipilih;
-        $this->p = 1 / Penyakit::count();
+
+        $penyakitCount = Penyakit::count();
+
+        // Prevent division by zero
+        if ($penyakitCount === 0) {
+            throw new RuntimeException('Tidak ada data penyakit dalam database.');
+        }
+
+        $this->p = 1 / $penyakitCount;
         $this->m = Gejala::count();
     }
 
@@ -62,10 +73,16 @@ class NaiveBayes
      * 4. Ambil hasil dengan probabilitas terbesar.
      *
      * @return Penyakit Penyakit dengan probabilitas terbesar.
+     *
+     * @throws RuntimeException Jika tidak dapat menentukan diagnosis.
      */
     public function diagnosis(): Penyakit
     {
         $semuaPenyakit = Penyakit::with('gejala')->get();
+
+        if ($semuaPenyakit->isEmpty()) {
+            throw new RuntimeException('Tidak ada data penyakit untuk diagnosis.');
+        }
 
         foreach ($semuaPenyakit as $penyakit) {
             $himpunanProbabilitasGejalaPenyakit = [];
@@ -92,9 +109,15 @@ class NaiveBayes
      * Mengambil penyakit dengan probabilitas terbesar.
      *
      * @return Penyakit Penyakit dengan probabilitas terbesar, termasuk nilai probabilitas dan persentasenya.
+     *
+     * @throws RuntimeException Jika tidak ada hasil probabilitas.
      */
     private function probabilitasTerbesarPenyakit(): Penyakit
     {
+        if (empty($this->probabilitasPenyakit)) {
+            throw new RuntimeException('Tidak ada hasil probabilitas untuk dievaluasi.');
+        }
+
         $idPenyakitTerbesar = array_keys(
             $this->probabilitasPenyakit,
             max($this->probabilitasPenyakit)
@@ -103,6 +126,11 @@ class NaiveBayes
         $maxValue = $this->probabilitasPenyakit[$idPenyakitTerbesar];
 
         $penyakit = Penyakit::query()->find($idPenyakitTerbesar);
+
+        if ($penyakit === null) {
+            throw new RuntimeException('Penyakit dengan ID terbesar tidak ditemukan.');
+        }
+
         $penyakit->probabilitas = $maxValue;
         $penyakit->persentase = $maxValue * 100;
 

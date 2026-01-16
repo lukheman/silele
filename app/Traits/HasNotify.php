@@ -2,24 +2,40 @@
 
 namespace App\Traits;
 
+/**
+ * Trait for dispatching toast notifications.
+ */
 trait HasNotify
 {
-
-    public function notifySuccess(string $message) {
+    /**
+     * Dispatch a success notification.
+     */
+    public function notifySuccess(string $message): void
+    {
         $this->dispatch('toast', variant: 'success', message: $message);
     }
 
-    public function notifyError(string $message) {
+    /**
+     * Dispatch an error notification.
+     */
+    public function notifyError(string $message): void
+    {
         $this->dispatch('toast', variant: 'error', message: $message);
     }
 
-    public function notifyWarning(string $message) {
+    /**
+     * Dispatch a warning notification.
+     */
+    public function notifyWarning(string $message): void
+    {
         $this->dispatch('toast', variant: 'warning', message: $message);
     }
 
-    public function notifyInfo(string $message) {
+    /**
+     * Dispatch an info notification.
+     */
+    public function notifyInfo(string $message): void
+    {
         $this->dispatch('toast', variant: 'info', message: $message);
     }
-
 }
-

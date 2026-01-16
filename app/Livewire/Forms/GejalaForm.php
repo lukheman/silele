@@ -7,6 +7,9 @@ use Livewire\Attributes\Validate;
 use Illuminate\Validation\Rule;
 use Livewire\Form;
 
+/**
+ * Form object for Gejala CRUD operations.
+ */
 class GejalaForm extends Form
 {
     public ?Gejala $gejala = null;
@@ -16,16 +19,28 @@ class GejalaForm extends Form
     #[Validate('required')]
     public string $nama = '';
 
-    protected function rules(): array {
+    /**
+     * Validation rules.
+     *
+     * @return array<string, mixed>
+     */
+    protected function rules(): array
+    {
         return [
             'kode' => [
                 'required',
-                 Rule::unique('gejala', 'kode')->ignore($this->gejala?->id),
+                Rule::unique('gejala', 'kode')->ignore($this->gejala?->id),
             ],
         ];
     }
 
-    protected function messages(): array {
+    /**
+     * Custom validation messages.
+     *
+     * @return array<string, string>
+     */
+    protected function messages(): array
+    {
         return [
             'kode.unique' => 'Kode gejala telah digunakan',
             'kode.required' => 'Kode gejala belum ada',
@@ -33,22 +48,30 @@ class GejalaForm extends Form
         ];
     }
 
-    public function store() {
+    /**
+     * Create a new gejala record.
+     */
+    public function store(): void
+    {
         Gejala::create($this->validate());
         $this->reset();
-
     }
 
-    public function update() {
+    /**
+     * Update an existing gejala record.
+     */
+    public function update(): void
+    {
         $this->gejala->update($this->validate());
         $this->reset();
     }
 
-    public function delete() {
+    /**
+     * Delete the gejala record.
+     */
+    public function delete(): void
+    {
         $this->gejala->delete();
         $this->reset();
     }
-
-
-
 }
