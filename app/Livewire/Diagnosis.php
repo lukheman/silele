@@ -49,6 +49,8 @@ class Diagnosis extends Component
         // Pastikan selectedGejala adalah array integer
         $gejalaIds = array_map('intval', $this->selectedGejala);
 
+        dd($gejalaIds);
+
         $NB = new NaiveBayes($gejalaIds);
 
         $this->diagnosaPenyakit = $NB->diagnosis();
