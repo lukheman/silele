@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Gejala;
 use App\Models\Penyakit;
+use Illuminate\Support\Collection;
 use RuntimeException;
 
 /**
@@ -64,19 +65,14 @@ class NaiveBayes
     }
 
     /**
-     * Melakukan diagnosis berdasarkan gejala yang dipilih.
+     * Melakukan diagnosis dan mengembalikan SEMUA penyakit dengan probabilitasnya.
+     * Diurutkan dari probabilitas tertinggi ke terendah.
      *
-     * Proses:
-     * 1. Ambil semua penyakit beserta gejalanya dari database.
-     * 2. Hitung probabilitas gejala untuk setiap penyakit.
-     * 3. Hitung probabilitas akhir untuk setiap penyakit.
-     * 4. Ambil hasil dengan probabilitas terbesar.
-     *
-     * @return Penyakit Penyakit dengan probabilitas terbesar.
+     * @return Collection<int, Penyakit> Collection penyakit dengan probabilitas.
      *
      * @throws RuntimeException Jika tidak dapat menentukan diagnosis.
      */
-    public function diagnosis(): Penyakit
+    public function diagnosisAll(): Collection
     {
         $semuaPenyakit = Penyakit::with('gejala')->get();
 
@@ -102,38 +98,30 @@ class NaiveBayes
                 round(array_product($himpunanProbabilitasGejalaPenyakit), 6);
         }
 
-        return $this->probabilitasTerbesarPenyakit();
+        // Urutkan dari probabilitas tertinggi
+        arsort($this->probabilitasPenyakit);
+
+        // Buat collection dengan probabilitas
+        $hasil = collect();
+        foreach ($this->probabilitasPenyakit as $idPenyakit => $probabilitas) {
+            $penyakit = $semuaPenyakit->find($idPenyakit);
+            if ($penyakit) {
+                $penyakit->probabilitas = $probabilitas;
+                $penyakit->persentase = round($probabilitas * 100, 2);
+                $hasil->push($penyakit);
+            }
+        }
+
+        return $hasil;
     }
 
     /**
-     * Mengambil penyakit dengan probabilitas terbesar.
+     * Melakukan diagnosis dan mengembalikan penyakit dengan probabilitas tertinggi saja.
      *
-     * @return Penyakit Penyakit dengan probabilitas terbesar, termasuk nilai probabilitas dan persentasenya.
-     *
-     * @throws RuntimeException Jika tidak ada hasil probabilitas.
+     * @return Penyakit Penyakit dengan probabilitas terbesar.
      */
-    private function probabilitasTerbesarPenyakit(): Penyakit
+    public function diagnosis(): Penyakit
     {
-        if (empty($this->probabilitasPenyakit)) {
-            throw new RuntimeException('Tidak ada hasil probabilitas untuk dievaluasi.');
-        }
-
-        $idPenyakitTerbesar = array_keys(
-            $this->probabilitasPenyakit,
-            max($this->probabilitasPenyakit)
-        )[0];
-
-        $maxValue = $this->probabilitasPenyakit[$idPenyakitTerbesar];
-
-        $penyakit = Penyakit::query()->find($idPenyakitTerbesar);
-
-        if ($penyakit === null) {
-            throw new RuntimeException('Penyakit dengan ID terbesar tidak ditemukan.');
-        }
-
-        $penyakit->probabilitas = $maxValue;
-        $penyakit->persentase = $maxValue * 100;
-
-        return $penyakit;
+        return $this->diagnosisAll()->first();
     }
 }

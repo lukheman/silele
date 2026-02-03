@@ -8,6 +8,7 @@ use App\Models\Penyakit;
 use App\Traits\HasNotify;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -23,7 +24,8 @@ class Diagnosis extends Component
 
     public bool $showHasil = false;
 
-    public ?Penyakit $diagnosaPenyakit = null;
+    /** @var SupportCollection<int, Penyakit>|null Semua hasil diagnosis */
+    public ?SupportCollection $hasilDiagnosis = null;
 
     /**
      * Get all symptoms for selection.
@@ -51,7 +53,8 @@ class Diagnosis extends Component
 
         $NB = new NaiveBayes($gejalaIds);
 
-        $this->diagnosaPenyakit = $NB->diagnosis();
+        // Ambil semua hasil diagnosis
+        $this->hasilDiagnosis = $NB->diagnosisAll();
 
         $this->showHasil = true;
     }
